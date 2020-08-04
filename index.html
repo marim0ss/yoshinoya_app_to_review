@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('css'); ?>
+  </head>
+  <body>
+  　<header id='menu-bar'>
+     <a id='menu-item' href="<?=App_url?>/exec" target="_top">一覧へ</a>
+     <a id='menu-item' href="<?=App_url?>/exec?mode=new" target="_top">新規登録</a>
+    </header>
+    <div class='container'>
+     <form method="post" action='<?=App_url?>/exec'>
+     <input type=hidden name=mode value='list' />
+      <p class='mode-show'>mode: list</p>
+      <h2>一覧画面</h2>
+      初期表示は、スプレッドシートの２列目のタイムスタンプで最新の１０行、6列を表示します。<br>
+      そのため、一覧表示したいものは左から６項目内にするようにします。<br>
+      ただし、左の２列はそのままにしてください。よって、残りの４項目になります。（※ソースを変更すれば項目数は調整できます）<br>
+      検索時は、スプレッドシート全体から対象文言を検索し、ヒットした行すべてを表示します。<br>
+      スプレッドシートの項目を追加（１行目の項目名を追加）する場合は、「コード.gs」のgetParamet関数の<br>
+      「//項目が増えたら増やす」の下にある書き方にならって増やしてください。<br>
+
+      <br>
+      新規は<a href='<?=App_url?>/exec?mode=new'>こちら</a><br>
+      検索：<input type='text' name=search /> <input type='submit' class='btn-radius' value='検索' /><br><br>
+
+      
+      <table>
+        <!-- 項目名を取得し、表示する   -->
+        <tr>
+          <? for (var h = 0; h < itemName[0].length; h++) { ?>
+              <th><?= itemName[0][h] ?></th>
+          <? } ?>
+        </tr>
+        <!-- データを取得し、表示する   -->
+        <? for (var i = 0; i < res.length; i++) { ?>
+        <tr>
+          <? for (var j = 0; j < res[i].length; j++) { ?>
+            <? if (j == 0) {   ?>
+              <td><a href='<?=App_url?>/exec?mode=edit&row=<?= res[i][j] ?>'>編集</a></td>
+            <? } else { ?>
+              <td><?= res[i][j] ?></td>
+            <? } ?>
+          <? } ?>
+        </tr>
+        <? } ?>
+       </table>
+       </form>
+    </div>
+  </body>
+</html>
+

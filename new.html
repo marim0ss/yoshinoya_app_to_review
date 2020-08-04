@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('css'); ?>
+  </head>
+  <body>
+  　<header id='menu-bar'>
+    　<a id='menu-item' href="<?=App_url?>/exec" target="_top">一覧へ</a>
+    </header>
+    <div class="container">
+     <form method="post" action='<?=App_url?>/exec'>
+      <input type=hidden name=mode value='new' />
+      <p class='mode-show'>mode: new</p>
+      <h2>登録画面</h2>
+      <table>　
+        <!-- 項目名を取得し、表示する   -->
+        <? var iItemName = 0; ?>
+        <? var sItemType = 1; ?>
+        <? var sItemSetting = 2; ?>
+        <? for (var h = 0; h < itemName[0].length; h++) { ?>
+        <tr> 
+          <th><?= itemName[iItemName][h] ?></th>
+          <? if ( h == 0 ) { ?>
+            <td><input type=hidden name=d_item<?= h ?> /></td>
+
+          <? } else if (h == 1) { ?>
+            <td><input type=hidden name=d_item<?= h ?> /></td>
+
+          <? } else { ?>
+
+            <? if (itemName[sItemType][h] == 'text') { ?>
+              <td><input type=text name=d_item<?= h ?> size=<?= itemName[sItemSetting][h] ?> maxlength=<?= itemName[sItemSetting][h] ?> /></td>
+
+            <? } else if (itemName[sItemType][h] == 'textarea') { 
+                  var ary = itemName[sItemSetting][h].split(','); ?>
+              <td><textarea name=d_item<?= h ?> rows=<?= ary[0] ?> cols=<?= ary[1] ?> placeholder='ご意見をご記入ください'></textarea></td>
+
+            <? } else if (itemName[sItemType][h] == 'select') { 
+                  var ary = itemName[sItemSetting][h]; ?>
+              <td><select name=d_item<?= h ?>>
+              <? for (var j = 0; j < ary.length; j++) {    ?>
+                <option value='<?= ary[j] ?>'><?= ary[j] ?></option>                
+              <? } ?>
+              </select></td>
+
+            <!-- radio ------------------------------------------------------------------- -->
+            <? } else if (itemName[sItemType][h] == 'radio') { 
+                  var ary = itemName[sItemSetting][h]; ?>
+              <td>
+              <? for (var j = 0; j < ary.length; j++) {  ?>
+                  <input type=radio name=d_item<?= h ?> value='<?= ary[j] ?>'><?= ary[j] ?><br>
+              <? } ?>
+              </td>
+            <!-- radio --ここまで--------------------------------------------------------- -->
+
+            <!-- check ------------------------------------------------------------------- -->
+            <? } else if (itemName[sItemType][h] == 'checkbox') { 
+                  var strCheckBox = itemName[sItemSetting][h].toString(); 
+                  var ary = strCheckBox.split(",");         
+                  ?>
+              <td>
+              <? for (var j = 0; j < ary.length; j++) {  ?>
+                  <input type=checkbox name=d_item<?= h ?> value='<?= ary[j] ?>'><?= ary[j] ?><br>
+              <? } ?>
+              </td>
+            <!-- check --ここまで--------------------------------------------------------- -->
+
+            <? } ?>   <!-- else if を閉じる -->
+          <? } ?>
+        </tr>
+        <? } ?>
+      </table>
+      <input type='submit' class='btn-radius' value='登録' /><br>
+      <a href='<?=App_url?>/exec'>登録キャンセル</a>
+    </form>
+    </div>
+  </body>
+</html>

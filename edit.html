@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <?!= include('css'); ?>
+  </head>
+  <body>
+    <header id='menu-bar'>
+     <a id='menu-item' href="<?=App_url?>/exec" target="_top">一覧へ</a>
+     <a id='menu-item' href="<?=App_url?>/exec?mode=new" target="_top">新規登録</a>
+    </header>
+    <div class='container'>
+     <form method="post" action='<?=App_url?>/exec'>
+      <input type=hidden name=mode value='edit' />
+      <p class='mode-show'>mode: edit</p>
+      <h2>編集画面</h2>
+      <table>　
+        <!-- 項目名を取得し、表示する   -->
+        <? var iItemName = 0; ?>
+        <? var sItemType = 1; ?>
+        <? var sItemSetting = 2; ?>
+        <? for (var h = 0; h < itemName[0].length; h++) { ?>
+        <tr> 
+          <th><?= itemName[0][h] ?></th>
+          <? if ( h == 0 ) { ?>
+            <td><input type=hidden name=d_item<?= h ?> value='<?= res[h] ?>' /><?= res[h] ?></td>
+
+          <? } else if (h == 1) { ?>
+            <td><input type=hidden name=d_item<?= h ?> /><?= res[h] ?></td>
+
+          <? } else { ?>
+            <? if (itemName[sItemType][h] == 'text') { ?>
+              <td><input type=text name=d_item<?= h ?> size=<?= itemName[sItemSetting][h] ?> 
+              maxlength=<?= itemName[sItemSetting][h] ?> value='<?= res[h] ?>' /></td>
+
+            <? } else if (itemName[sItemType][h] == 'textarea') { 
+                  var ary = itemName[sItemSetting][h].split(','); ?>
+              <!-- TEXTAREAタグの間に空白を入れるとそのまま表示されるので注意 -->
+              <td><textarea name=d_item<?= h ?> rows=<?= ary[0] ?> cols=<?= ary[1] ?> placeholder='ご意見をご記入ください'><?= res[h] ?></textarea></td>
+
+            <!-- SELECT ------------------------------------------------------------------- -->
+            <? } else if (itemName[sItemType][h] == 'select') { 
+                  var ary = itemName[sItemSetting][h]; ?>
+              <td><select name=d_item<?= h ?>>
+              <? for (var j = 0; j < ary.length; j++) {  ?>
+
+                <? if (ary[j] == res[h]) { ?>
+                  <option value='<?= ary[j] ?>' selected><?= ary[j] ?></option>
+                <? } else { ?>
+                  <option value='<?= ary[j] ?>'><?= ary[j] ?></option>
+                <? } ?>
+
+              <? } ?>
+              </select></td>
+            <!-- SELECT --ここまで--------------------------------------------------------- -->
+
+            <!-- radio ------------------------------------------------------------------- -->
+            <? } else if (itemName[sItemType][h] == 'radio') { 
+                  var ary = itemName[sItemSetting][h]; ?>
+              <td>
+              <? for (var j = 0; j < ary.length; j++) {  ?>
+                <? if (ary[j] == res[h]) { ?>
+                  <input type=radio name=d_item<?= h ?> value='<?= ary[j] ?>' checked="checked"><?= ary[j] ?><br>
+                <? } else { ?>
+                  <input type=radio name=d_item<?= h ?> value='<?= ary[j] ?>'><?= ary[j] ?><br>
+                <? } ?>
+              <? } ?>
+              </td>
+
+            <!-- radio --ここまで--------------------------------------------------------- -->
+
+            <!-- check ------------------------------------------------------------------- -->
+            <? } else if (itemName[sItemType][h] == 'checkbox') { 
+                  var strCheckBox = itemName[sItemSetting][h].toString(); 
+                  var ary = strCheckBox.split(",");         
+                  var ary_res = (res[h].toString()).split(",");
+                  ?>
+              <td>
+              <? for (var j = 0; j < ary.length; j++) {  ?>
+                <? var ijudge = 0;
+                   for (var k = 0; k < ary_res.length; k++) { 
+                       if (ary[j] == ary_res[k]) {
+                           ijudge = 1;
+                       }
+                   } ?>
+                <? if (ijudge == 1) { ?>
+                  <input type=checkbox name=d_item<?= h ?> value='<?= ary[j] ?>' checked="checked"><?= ary[j] ?><br>
+                <? } else { ?>
+                  <input type=checkbox name=d_item<?= h ?> value='<?= ary[j] ?>'><?= ary[j] ?><br>
+                <? } ?>
+
+              <? } ?>
+              </td>
+
+            <!-- check --ここまで--------------------------------------------------------- -->
+
+            <? } ?>   <!-- else if を閉じる -->
+          <? } ?>
+        </tr>
+        <? } ?>
+      </table>
+      <input type='submit' class='btn-radius' value='更新' /><br>
+      <a href='<?=App_url?>/exec'>更新キャンセル</a>
+     </form>
+    </div>
+  </body>
+</html>
